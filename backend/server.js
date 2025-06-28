@@ -20,7 +20,8 @@ const corsOptions = {
     'https://vitacare.health',
     'https://www.vitacare.health',
     'https://vitacare-admin.vercel.app',
-    'https://vitacare.vercel.app'
+    'https://vitacare.vercel.app',
+    'https://vitacare-health.vercel.app'
   ],
   credentials: true,
   optionsSuccessStatus: 200
