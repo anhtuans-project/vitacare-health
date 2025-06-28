@@ -27,7 +27,7 @@ const App = () => {
         <Navbar setShowLogin={setShowLogin}/>
         <Routes>
           <Route path='/' element={<Home />}/>
-          <Route path="/tuvi" element={<TuViPage />} />
+          <Route path="/hoidap" element={<TuViPage />} />
           <Route path='/cart' element={<Cart />}/>
           <Route path='/order' element={<PlaceOrder />}/>
           <Route path='/myorders' element={<MyOrders />}/>

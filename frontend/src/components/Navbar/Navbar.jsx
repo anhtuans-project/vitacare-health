@@ -19,7 +19,7 @@ const Navbar = ({ setShowLogin }) => {
       setMenu('home');
     } else if (path === '/store') {
       setMenu('store');
-    } else if (path === '/tuvi') {
+    } else if (path === '/hoidap') {
       setMenu('mob-app');
     } else if (path.includes('/cart')) {
       setMenu('cart');
@@ -81,7 +81,7 @@ const logout = () => {
       <ul className="navbar-menu">
         <Link to="/" onClick={() => setMenu("home")} className={`${menu === "home" ? "active" : ""}`}>Trang chủ</Link>
         <Link to="/store" onClick={() => setMenu("store")} className={`${menu === "store" ? "active" : ""}`}>Tra cứu thành phần thuốc</Link>        
-        <Link to="/tuvi" onClick={() => setMenu("mob-app")} className={`${menu === "mob-app" ? "active" : ""}`}>Hỏi đáp</Link>
+        <Link to="/hoidap" onClick={() => setMenu("mob-app")} className={`${menu === "mob-app" ? "active" : ""}`}>Hỏi đáp</Link>
         <a href='#footer' onClick={() => setMenu("contact")} className={`${menu === "contact" ? "active" : ""}`}>Liên hệ</a>
       </ul>
       <div className="navbar-right">
