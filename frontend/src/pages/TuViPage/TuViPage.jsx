@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./TuViPage.css"; // Import your CSS styles
 
-const API_BASE = "http://localhost:5000/api"; // Change port if needed
+const API_BASE = import.meta.env.VITE_API_BASE || "http://localhost:5000/api"; // Use environment variable
 
 function TuViPage() {
   const [activeTab, setActiveTab] = useState("info");

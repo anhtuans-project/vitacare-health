@@ -12,9 +12,23 @@ import analyzeRouter from "./routes/analyze.js";
 const app = express();
 const port = process.env.PORT || 5000;
 
+// CORS configuration
+const corsOptions = {
+  origin: [
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'https://vitacare.health',
+    'https://www.vitacare.health',
+    'https://vitacare-admin.vercel.app',
+    'https://vitacare.vercel.app'
+  ],
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
 // middlewares
 app.use(express.json());
-app.use(cors());
+app.use(cors(corsOptions));
 
 // db connection
 connectDB();

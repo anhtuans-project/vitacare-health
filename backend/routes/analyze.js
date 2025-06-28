@@ -1,6 +1,11 @@
 import express from 'express';
+import 'dotenv/config';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 const router = express.Router();
+
+// Initialize Gemini AI
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || 'AIzaSyBjSTPo1V55NXSzSzcQr2lnD-H_D4s0v6I');
 
 router.post('/analyze-user', async (req, res) => {
   try {
@@ -9,26 +14,42 @@ router.post('/analyze-user', async (req, res) => {
       return res.status(400).json({ success: false, error: 'Họ tên và năm sinh là bắt buộc' });
     }
 
-    // Tạo phân tích chi tiết (chỉ tư vấn sức khỏe, không có phong thủy)
-    let detailedAnalysis = '';
+    // Prepare the prompt for Gemini AI
+    let prompt = `Bạn là một chuyên gia tư vấn sức khỏe. Hãy phân tích thông tin sau và đưa ra lời khuyên chi tiết:
+
+Thông tin cá nhân:
+- Họ tên: ${name}
+- Năm sinh: ${birthYear}
+- Giới tính: ${gender || 'Không xác định'}
+
+`;
+
     if (symptoms) {
-      detailedAnalysis += `🔎 Triệu chứng: ${symptoms}\n- Mất ngủ là tình trạng khó đi vào giấc ngủ, ngủ không sâu hoặc thức dậy nhiều lần trong đêm.\n`;
-      detailedAnalysis += '- Các nguyên nhân phổ biến gồm căng thẳng, lo âu, sử dụng thiết bị điện tử trước khi ngủ, uống cà phê hoặc rượu bia buổi tối, rối loạn đồng hồ sinh học, hoặc các bệnh lý nền như trầm cảm, đau mãn tính.\n';
-      detailedAnalysis += '- Hậu quả của mất ngủ kéo dài có thể gây mệt mỏi, giảm tập trung, suy giảm trí nhớ, dễ cáu gắt, tăng nguy cơ mắc bệnh tim mạch, tiểu đường và béo phì.\n';
-      detailedAnalysis += '- Nếu tình trạng mất ngủ kéo dài trên 2 tuần, bạn nên gặp bác sĩ chuyên khoa để được tư vấn và điều trị phù hợp.\n';
+      prompt += `Triệu chứng: ${symptoms}\n`;
     }
     if (sleepHabits) {
-      detailedAnalysis += `\n💡 Thói quen & thể chất: ${sleepHabits}\n- Ngủ muộn ảnh hưởng đến sinh học, giảm chất lượng giấc ngủ và ảnh hưởng đến sức khỏe tổng thể.\n`;
-      detailedAnalysis += 'Bạn nên tập thói quen đi ngủ trước 23h, tránh sử dụng điện thoại/máy tính ít nhất 30 phút trước khi ngủ, tạo môi trường ngủ yên tĩnh, thoáng mát.\n';
+      prompt += `Thói quen & thể chất: ${sleepHabits}\n`;
     }
     if (preferences) {
-      detailedAnalysis += `\n❓ Hỏi đáp: ${preferences}\n- Để cải thiện mất ngủ, bạn nên:\n`;
-      detailedAnalysis += '  • Thiết lập giờ đi ngủ và thức dậy cố định mỗi ngày, kể cả cuối tuần.\n';
-      detailedAnalysis += '  • Hạn chế uống cà phê, rượu bia sau 16h.\n';
-      detailedAnalysis += '  • Tập thể dục nhẹ nhàng vào ban ngày, tránh vận động mạnh gần giờ ngủ.\n';
-      detailedAnalysis += '  • Thư giãn trước khi ngủ: nghe nhạc nhẹ, thiền, đọc sách giấy hoặc ngồi thiền.\n';
-      detailedAnalysis += '  • Nếu vẫn khó ngủ kéo dài, nên gặp chuyên gia y tế.\n';
+      prompt += `Câu hỏi/Thắc mắc: ${preferences}\n`;
     }
+
+    prompt += `
+
+Hãy đưa ra phân tích chi tiết bao gồm:
+1. Đánh giá tình trạng sức khỏe hiện tại
+2. Nguyên nhân có thể gây ra các vấn đề
+3. Lời khuyên cụ thể để cải thiện sức khỏe
+4. Các biện pháp phòng ngừa
+5. Khi nào nên gặp bác sĩ
+
+Trả lời bằng tiếng Việt, sử dụng ngôn ngữ dễ hiểu và thân thiện.`;
+
+    // Generate response using Gemini AI
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const detailedAnalysis = response.text().replace(/\*/g, ' ');
 
     const analysis = {
       name,
@@ -38,7 +59,11 @@ router.post('/analyze-user', async (req, res) => {
 
     return res.json({ success: true, data: analysis });
   } catch (error) {
-    return res.status(500).json({ success: false, error: error.message || 'Lỗi khi phân tích dữ liệu' });
+    console.error('Gemini API Error:', error);
+    return res.status(500).json({ 
+      success: false, 
+      error: error.message || 'Lỗi khi phân tích dữ liệu với AI' 
+    });
   }
 });
 
