@@ -21,7 +21,9 @@ const corsOptions = {
     'https://www.vitacare.health',
     'https://vitacare-admin.vercel.app',
     'https://vitacare.vercel.app',
-    'https://vitacare-health.vercel.app'
+    'https://vitacare-health.vercel.app',
+    /^https:\/\/.*\.vercel\.app$/,  // Allow all Vercel subdomains
+    /^https:\/\/.*\.onrender\.com$/  // Allow all Render subdomains
   ],
   credentials: true,
   optionsSuccessStatus: 200
