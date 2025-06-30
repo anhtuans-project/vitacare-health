@@ -85,7 +85,7 @@ const logout = () => {
         <a href='#footer' onClick={() => setMenu("contact")} className={`${menu === "contact" ? "active" : ""}`}>Liên hệ</a>
       </ul>
       <div className="navbar-right">
-        <img src={assets.search_icon} alt="" />
+        {/* <img src={assets.search_icon} alt="" /> */}
         {!token ? <button onClick={() => setShowLogin(true)}>Đăng kí</button>
           : <div className='navbar-profile'>
             <img src={assets.profile_icon} alt="" />
