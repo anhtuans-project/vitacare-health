@@ -126,7 +126,7 @@ function TuViPage() {
               </div>
 
               <div className="form-group">
-                <label>Triệu Chứng Lâm Sáng</label>
+                <label>Triệu Chứng Lâm Sàng</label>
                 <textarea
                   value={userInfo.symptoms}
                   onChange={(e) =>
