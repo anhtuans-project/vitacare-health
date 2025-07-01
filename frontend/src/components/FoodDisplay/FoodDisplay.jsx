@@ -42,7 +42,7 @@ const FoodDisplay = ({category}) => {
 
   return (
     <div className='food-display' id='food-display'>
-      <h2>Sản Phẩm Nổi Bật</h2>
+      <h2></h2>
       <div className='food-display-list'>
         {randomProducts.length > 0 ? (
           randomProducts.map((item) => (
@@ -57,7 +57,7 @@ const FoodDisplay = ({category}) => {
             </div>
           ))
         ) : (
-          <p className="no-products">Đang cập nhật!</p>
+          <p className="no-products"></p>
         )}
       </div>
 
