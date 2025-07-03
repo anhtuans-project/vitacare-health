@@ -3,7 +3,7 @@
     max-width: 1200px;
     height: 520px;
     margin: 30px auto;
-    background: url('/src/assets/header_img.png') no-repeat center center;
+    background: url('/src/assets/header_image.png') no-repeat center center;
     background-size: cover;
     position: relative;
     border-radius: 12px;
