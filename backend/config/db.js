@@ -1,9 +1,39 @@
 import mongoose from "mongoose";
 
-export const  connectDB = async () =>{
-
-    await mongoose.connect('mongodb+srv://root:1234@cluster0.ejzdvo2.mongodb.net/EXE202').then(()=>console.log("DB Connected"));
-   
+export const connectDB = async () => {
+    try {
+        const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://root:1234@cluster0.ejzdvo2.mongodb.net/EXE202';
+        
+        await mongoose.connect(mongoURI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
+            socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
+        });
+        
+        console.log("DB Connected successfully");
+        
+        // Handle connection events
+        mongoose.connection.on('error', (err) => {
+            console.error('MongoDB connection error:', err);
+        });
+        
+        mongoose.connection.on('disconnected', () => {
+            console.log('MongoDB disconnected');
+        });
+        
+        mongoose.connection.on('reconnected', () => {
+            console.log('MongoDB reconnected');
+        });
+        
+    } catch (error) {
+        console.error("Database connection failed:", error);
+        // Retry connection after 5 seconds
+        setTimeout(() => {
+            console.log("Retrying database connection...");
+            connectDB();
+        }, 5000);
+    }
 }
 
 export function getDB() {

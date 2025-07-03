@@ -73,7 +73,24 @@ const LoginPopup = ({ setShowLogin }) => {
                 notifyError(response.data.message)
             }
         } catch (error) {
-            notifyError(error.response?.data?.message || "Đã xảy ra lỗi")
+            console.error("Login/Register error:", error);
+            let errorMessage = "Đã xảy ra lỗi";
+            
+            if (error.response) {
+                // Server responded with error status
+                errorMessage = error.response.data?.message || `Lỗi ${error.response.status}`;
+                console.error("Server error:", error.response.data);
+            } else if (error.request) {
+                // Network error
+                errorMessage = "Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối mạng.";
+                console.error("Network error:", error.request);
+            } else {
+                // Other error
+                errorMessage = error.message || "Lỗi không xác định";
+                console.error("Other error:", error.message);
+            }
+            
+            notifyError(errorMessage);
         }
     }
 

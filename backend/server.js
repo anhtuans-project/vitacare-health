@@ -7,6 +7,7 @@ import "dotenv/config";
 import cartRouter from "./routes/cartRoute.js";
 import orderRouter from "./routes/orderRoute.js";
 import analyzeRouter from "./routes/analyze.js";
+import mongoose from "mongoose";
 
 // app config
 const app = express();
@@ -14,17 +15,38 @@ const port = process.env.PORT || 5000;
 
 // CORS configuration
 const corsOptions = {
-  origin: [
-    'http://localhost:5173',
-    'http://localhost:3000',
-    'https://vitacare.health',
-    'https://www.vitacare.health',
-    'https://vitacare-admin.vercel.app',
-    'https://vitacare.vercel.app',
-    'https://vitacare-health.vercel.app',
-    /^https:\/\/.*\.vercel\.app$/,  // Allow all Vercel subdomains
-    /^https:\/\/.*\.onrender\.com$/  // Allow all Render subdomains
-  ],
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = [
+      'http://localhost:5173',
+      'http://localhost:3000',
+      'https://vitacare.health',
+      'https://www.vitacare.health',
+      'https://vitacare-admin.vercel.app',
+      'https://vitacare.vercel.app',
+      'https://vitacare-health.vercel.app',
+      /^https:\/\/.*\.vercel\.app$/,
+      /^https:\/\/.*\.onrender\.com$/,
+      /^https:\/\/.*\.netlify\.app$/
+    ];
+    
+    // Check if origin is allowed
+    const isAllowed = allowedOrigins.some(allowedOrigin => {
+      if (allowedOrigin instanceof RegExp) {
+        return allowedOrigin.test(origin);
+      }
+      return allowedOrigin === origin;
+    });
+    
+    if (isAllowed) {
+      callback(null, true);
+    } else {
+      console.log('CORS blocked origin:', origin);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
   optionsSuccessStatus: 200
 };
@@ -48,6 +70,25 @@ app.use("/api", analyzeRouter);
 
 app.get("/", (req, res) => {
   res.send("API Working");
+});
+
+// Health check endpoint
+app.get("/health", async (req, res) => {
+  try {
+    const dbStatus = mongoose.connection.readyState === 1 ? "connected" : "disconnected";
+    res.json({
+      status: "healthy",
+      timestamp: new Date().toISOString(),
+      database: dbStatus,
+      environment: process.env.NODE_ENV || "development"
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "unhealthy",
+      error: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
 });
 
 app.listen(port, () =>

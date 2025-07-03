@@ -5,12 +5,13 @@ import userModel from "../models/userModel.js";
 
 // Create token with expiration
 const createToken = (id) => {
-    if (!process.env.JWT_SECRET) {
+    const jwtSecret = process.env.JWT_SECRET || 'fallback-secret-key-for-deployment';
+    if (!jwtSecret) {
         console.error("JWT_SECRET is not defined in environment variables");
         throw new Error("Server configuration error");
     }
     // Token expires in 7 days
-    return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+    return jwt.sign({ id }, jwtSecret, { expiresIn: '7d' });
 }
 
 // Login user
@@ -38,6 +39,12 @@ const loginUser = async (req, res) => {
         res.status(200).json({ success: true, token, userName: user.name });
     } catch (error) {
         console.error("Login error:", error);
+        // Log more details for debugging
+        console.error("Error details:", {
+            message: error.message,
+            stack: error.stack,
+            email: email
+        });
         res.status(500).json({ success: false, message: "Server error during login" });
     }
 }
@@ -78,6 +85,13 @@ const registerUser = async (req, res) => {
         res.status(201).json({ success: true, token, userName: user.name });
     } catch (error) {
         console.error("Registration error:", error);
+        // Log more details for debugging
+        console.error("Error details:", {
+            message: error.message,
+            stack: error.stack,
+            email: email,
+            name: name
+        });
         res.status(500).json({ success: false, message: "Server error during registration" });
     }
 }
