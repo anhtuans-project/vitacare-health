@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState } from "react";
-import { menu_list } from "../assets/assets";
+import { menu_list } from "../components/assets/assets";
 import axios from "axios";
 import {
   notifyAddedToCart,
@@ -8,7 +8,9 @@ import {
 export const StoreContext = createContext(null);
 
 const StoreContextProvider = (props) => {
-  const url = import.meta.env.VITE_API_BASE?.replace('/api', '') || "http://localhost:5000";
+  const url =
+    import.meta.env.VITE_API_BASE?.replace("/api", "") ||
+    "http://localhost:5000";
   const [food_list, setFoodList] = useState([]);
   const [cartItems, setCartItems] = useState({});
   const [token, setToken] = useState("");

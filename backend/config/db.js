@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 
 export const connectDB = async () => {
     try {
-        const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://root:1234@cluster0.ejzdvo2.mongodb.net/EXE202';
-        
+        const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://mudotet:Messitu123456@cluster0.4klvbgm.mongodb.net/EXE202';
+
         await mongoose.connect(mongoURI, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
