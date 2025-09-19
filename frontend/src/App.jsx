@@ -13,6 +13,7 @@ import Verify from "./pages/Verify/Verify";
 import TuViPage from "./pages/TuViPage/TuViPage";
 import Store from "./pages/Store/Store";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
+import Custom3d from "./pages/Custom3d/Custom3d";
 
 const App = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -26,6 +27,7 @@ const App = () => {
         <Navbar setShowLogin={setShowLogin} />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/custom3d" element={<Custom3d />} />
           <Route path="/hoidap" element={<TuViPage />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/order" element={<PlaceOrder />} />

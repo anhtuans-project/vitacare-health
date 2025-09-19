@@ -21,6 +21,8 @@ const Navbar = ({ setShowLogin }) => {
       setMenu("store");
     } else if (path === "/hoidap") {
       setMenu("mob-app");
+    } else if (path === "/custom3d") {
+      setMenu("custom3d");
     } else if (path.includes("/cart")) {
       setMenu("cart");
     } else {
@@ -86,6 +88,13 @@ const Navbar = ({ setShowLogin }) => {
           className={`${menu === "home" ? "active" : ""}`}
         >
           Trang chủ
+        </Link>
+        <Link
+          to="/custom3d"
+          onClick={() => setMenu("custom3d")}
+          className={`${menu === "custom3d" ? "active" : ""}`}
+        >
+          Tạo 3D
         </Link>
         <Link
           to="/store"
