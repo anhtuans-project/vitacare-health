@@ -1,9 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react'
-import './Navbar.css'
-import { assets } from '../../assets/assets'
-import { Link, useNavigate, useLocation } from 'react-router-dom'
-import { StoreContext } from '../../Context/StoreContext'
-import { notifyLogout } from '../../utils/notifications'
+import React, { useContext, useEffect, useState } from "react";
+import "./Navbar.css";
+import { assets } from "../assets/assets";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { StoreContext } from "../../Context/StoreContext";
+import { notifyLogout } from "../../utils/notifications";
 
 const Navbar = ({ setShowLogin }) => {
   const [menu, setMenu] = useState("");
@@ -15,23 +15,25 @@ const Navbar = ({ setShowLogin }) => {
   // Cập nhật menu dựa trên URL hiện tại
   useEffect(() => {
     const path = location.pathname;
-    if (path === '/') {
-      setMenu('home');
-    } else if (path === '/store') {
-      setMenu('store');
-    } else if (path === '/hoidap') {
-      setMenu('mob-app');
-    } else if (path.includes('/cart')) {
-      setMenu('cart');
+    if (path === "/") {
+      setMenu("home");
+    } else if (path === "/store") {
+      setMenu("store");
+    } else if (path === "/hoidap") {
+      setMenu("mob-app");
+    } else if (path === "/custom3d") {
+      setMenu("custom3d");
+    } else if (path.includes("/cart")) {
+      setMenu("cart");
     } else {
       // Mặc định không có menu nào được chọn
-      setMenu('');
+      setMenu("");
     }
   }, [location.pathname]);
 
   useEffect(() => {
     const updateCartCount = () => {
-      const cart = JSON.parse(localStorage.getItem('cart') || '{}');
+      const cart = JSON.parse(localStorage.getItem("cart") || "{}");
       // Chỉ đếm số loại sản phẩm (không đếm số lượng)
       const uniqueItemCount = Object.keys(cart).length;
       setCartCount(uniqueItemCount);
@@ -41,64 +43,104 @@ const Navbar = ({ setShowLogin }) => {
     updateCartCount();
 
     // Lắng nghe sự kiện thay đổi trong localStorage
-    window.addEventListener('storage', updateCartCount);
-    
+    window.addEventListener("storage", updateCartCount);
+
     // Lắng nghe custom event để cập nhật khi thêm sản phẩm
-    window.addEventListener('cartUpdated', updateCartCount);
+    window.addEventListener("cartUpdated", updateCartCount);
 
     return () => {
-      window.removeEventListener('storage', updateCartCount);
-      window.removeEventListener('cartUpdated', updateCartCount);
+      window.removeEventListener("storage", updateCartCount);
+      window.removeEventListener("cartUpdated", updateCartCount);
     };
   }, []);
 
-  
-const logout = () => {
+  const logout = () => {
     // Xóa token
     localStorage.removeItem("token");
     setToken("");
-    
+
     // Xóa toàn bộ dữ liệu cart và products khi logout
     localStorage.removeItem("cart");
     localStorage.removeItem("products");
-    
+
     // Reset cart count về 0
     setCartCount(0);
-    
+
     // Dispatch event để cập nhật các component khác
-    window.dispatchEvent(new Event('cartUpdated'));
-    
+    window.dispatchEvent(new Event("cartUpdated"));
+
     // Navigate về trang chủ
-    navigate('/');
-    
+    navigate("/");
+
     // Hiển thị thông báo logout
     notifyLogout();
-  }
+  };
 
   return (
-    <div className='navbar'>
-      <Link to='/'><img className='logo' src={assets.logo} alt="" /></Link>
+    <div className="navbar">
+      <Link to="/">
+        <img className="logo" src={assets.logo} alt="" />
+      </Link>
       <ul className="navbar-menu">
-        <Link to="/" onClick={() => setMenu("home")} className={`${menu === "home" ? "active" : ""}`}>Trang chủ</Link>
-        <Link to="/store" onClick={() => setMenu("store")} className={`${menu === "store" ? "active" : ""}`}>Tra cứu thành phần thuốc</Link>        
-        <Link to="/hoidap" onClick={() => setMenu("mob-app")} className={`${menu === "mob-app" ? "active" : ""}`}>Hỏi đáp</Link>
-        <a href='#footer' onClick={() => setMenu("contact")} className={`${menu === "contact" ? "active" : ""}`}>Liên hệ</a>
+        <Link
+          to="/"
+          onClick={() => setMenu("home")}
+          className={`${menu === "home" ? "active" : ""}`}
+        >
+          Trang chủ
+        </Link>
+        <Link
+          to="/custom3d"
+          onClick={() => setMenu("custom3d")}
+          className={`${menu === "custom3d" ? "active" : ""}`}
+        >
+          Tạo 3D
+        </Link>
+        <Link
+          to="/store"
+          onClick={() => setMenu("store")}
+          className={`${menu === "store" ? "active" : ""}`}
+        >
+          Tra cứu thành phần thuốc
+        </Link>
+        <Link
+          to="/hoidap"
+          onClick={() => setMenu("mob-app")}
+          className={`${menu === "mob-app" ? "active" : ""}`}
+        >
+          Hỏi đáp
+        </Link>
+        <a
+          href="#footer"
+          onClick={() => setMenu("contact")}
+          className={`${menu === "contact" ? "active" : ""}`}
+        >
+          Liên hệ
+        </a>
       </ul>
       <div className="navbar-right">
         {/* <img src={assets.search_icon} alt="" /> */}
-        {!token ? <button onClick={() => setShowLogin(true)}>Đăng kí</button>
-          : <div className='navbar-profile'>
+        {!token ? (
+          <button onClick={() => setShowLogin(true)}>Đăng kí</button>
+        ) : (
+          <div className="navbar-profile">
             <img src={assets.profile_icon} alt="" />
-            <ul className='navbar-profile-dropdown'>
-              <li onClick={()=>navigate('/myorders')}> <img src={assets.bag_icon} alt="" /> <p>Đơn hàng</p></li>
+            <ul className="navbar-profile-dropdown">
+              <li onClick={() => navigate("/myorders")}>
+                {" "}
+                <img src={assets.bag_icon} alt="" /> <p>Đơn hàng</p>
+              </li>
               <hr />
-              <li onClick={logout}> <img src={assets.logout_icon} alt="" /> <p>Đăng xuất</p></li> 
+              <li onClick={logout}>
+                {" "}
+                <img src={assets.logout_icon} alt="" /> <p>Đăng xuất</p>
+              </li>
             </ul>
           </div>
-        }
+        )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
