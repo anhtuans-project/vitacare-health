@@ -9,9 +9,10 @@ const Footer = () => {
         <div className="footer-content-left">
           <img src={assets.logo} alt="Logo" />
           <p>
-            VitaCare không chỉ là một ứng dụng, mà là cầu nối giữa trí tuệ cổ
-            truyền và sức mạnh của AI hiện đại, với mục tiêu giúp bạn chủ động
-            lắng nghe cơ thể, sống khỏe và bền vững từ bên trong.
+            Modera là website thiết kế 3D hiện đại, 
+            nơi bạn có thể dễ dàng tạo ra mô hình trực quan sống động, 
+            kết hợp công nghệ tiên tiến với giao diện thân thiện để biến 
+            mọi ý tưởng sáng tạo thành hiện thực.
           </p>
           <div className="footer-social-icons">
             <a href="https://www.facebook.com/vitacarefu.2025">
@@ -37,8 +38,8 @@ const Footer = () => {
         <div className="footer-content-right">
           <h2>Liên hệ trực tiếp </h2>
           <ul>
-            <li>0356286562 </li>
-            <li>vitacare.official@gmail.com</li>
+            <li>0397345956 </li>
+            <li>ngbaolong1411@gmail.com</li>
           </ul>
         </div>
       </div>
