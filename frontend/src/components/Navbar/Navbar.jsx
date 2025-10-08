@@ -96,20 +96,20 @@ const Navbar = ({ setShowLogin }) => {
         >
           Tạo 3D
         </Link>
-        <Link
+        {/* <Link
           to="/store"
           onClick={() => setMenu("store")}
           className={`${menu === "store" ? "active" : ""}`}
         >
           Tra cứu thành phần thuốc
-        </Link>
-        <Link
+        </Link> */}
+        {/* <Link
           to="/hoidap"
           onClick={() => setMenu("mob-app")}
           className={`${menu === "mob-app" ? "active" : ""}`}
         >
           Hỏi đáp
-        </Link>
+        </Link> */}
         <a
           href="#footer"
           onClick={() => setMenu("contact")}
