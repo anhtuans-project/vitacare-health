@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 
 // Lazy import inside effect to avoid SSR issues if any
-const CharacterViewer = () => {
+const CharacterViewer = ({ modelFile = "scene.gltf", height = "70vh" }) => {
   const containerRef = useRef(null);
   const rendererRef = useRef(null);
 
@@ -80,9 +80,24 @@ const CharacterViewer = () => {
 
       // Load GLTF
       const loader = new GLTFLoader();
-      loader.setPath("/humans_3d/");
+      
+      // Normalize modelFile path
+      let modelPath = modelFile.trim();
+      if (modelPath.startsWith("/")) modelPath = modelPath.slice(1);
+      
+      // Extract basePath and fileName
+      let basePath = "";
+      let fileName = modelPath;
+      if (modelPath.includes("/")) {
+        const lastSlash = modelPath.lastIndexOf("/");
+        basePath = modelPath.substring(0, lastSlash + 1);
+        fileName = modelPath.substring(lastSlash + 1);
+      }
+      
+      // Set base path to humans_3d + model folder
+      loader.setPath(`/humans_3d/${basePath}`);
       loader.load(
-        "scene.gltf",
+        fileName,
         (gltf) => {
           const model = gltf.scene;
           // Normalize/scale model to a reasonable size
@@ -187,7 +202,7 @@ const CharacterViewer = () => {
   return (
     <div
       ref={containerRef}
-      style={{ width: "100%", height: "70vh", position: "relative" }}
+      style={{ width: "100%", height: height, position: "relative" }}
     />
   );
 };

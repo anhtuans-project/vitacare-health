@@ -3,13 +3,18 @@
 import { useEffect, useState } from "react";
 import Papa from "papaparse";
 import "./Store.css";
+import CharacterViewer from "../../components/Custom3dGroup/CharacterViewer";
+import { getModelImage } from '../../assets/assets.js';
+import qrImage from "/src/assets/QR.png";
 
 const Store = () => {
   const [herbList, setHerbList] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedHerb, setSelectedHerb] = useState(null);
+  const [show3d, setShow3d] = useState(false);
   const itemsPerPage = 12;
+  const [showQR, setShowQR] = useState(false);
 
   useEffect(() => {
     fetch("/duoclieu_30_chitiet.csv")
@@ -88,9 +93,8 @@ const Store = () => {
           <button
             key={page}
             onClick={() => goToPage(page)}
-            className={`pagination-number ${
-              currentPage === page ? "active" : ""
-            }`}
+            className={`pagination-number ${currentPage === page ? "active" : ""
+              }`}
           >
             {page}
           </button>
@@ -103,12 +107,15 @@ const Store = () => {
 
   return (
     <div className="store-container">
-      <h1>Danh sách dược liệu</h1>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <h1>Danh sách model</h1>
+        {/* <button onClick={() => setShow3d(true)} className="open-3d-button">Xem mô hình 3D</button> */}
+      </div>
 
       <div style={{ marginBottom: "20px" }}>
         <input
           type="text"
-          placeholder="Tìm kiếm tên dược liệu..."
+          placeholder="Tìm kiếm tên model..."
           value={searchTerm}
           onChange={handleSearchChange}
           style={{
@@ -131,21 +138,27 @@ const Store = () => {
               <div
                 key={index}
                 className="product-card"
-                onClick={() => setSelectedHerb(herb)}
+                onClick={() => {
+                  setSelectedHerb(herb);
+                  setShow3d(true);
+                }}
               >
                 <div className="product-image">
-                  {image ? (
-                    <img src={image} alt={name || "Dược liệu"} />
-                  ) : (
-                    <div className="image-placeholder" />
-                  )}
+                  <img
+                    src={getModelImage(name)}
+                    alt={name || "Model 3D"}
+                    onError={(e) => {
+                      e.target.onerror = null; // Prevent infinite loop
+                      e.target.src = getModelImage('default'); // Use default image
+                    }}
+                  />
                 </div>
                 <h3>{name || "Không tên"}</h3>
               </div>
             );
           })
         ) : (
-          <p>Không tìm thấy dược liệu phù hợp.</p>
+          <p>Không tìm thấy model phù hợp.</p>
         )}
       </div>
 
@@ -171,21 +184,56 @@ const Store = () => {
         </div>
       )}
 
-      {selectedHerb && (
-        <div className="modal" onClick={() => setSelectedHerb(null)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h2>{selectedHerb["Tên dược liệu"]}</h2>
-            <img
-              src={selectedHerb["Link ảnh"]}
-              alt={selectedHerb["Tên dược liệu"]}
-              style={{ maxWidth: "100%", marginBottom: "10px" }}
-            />
-            <p><strong>Mô tả cây:</strong> {selectedHerb["Mô tả cây"] || "Chưa có."}</p>
-            <p><strong>Sinh thái:</strong> {selectedHerb["Sinh thái"] || "Chưa có."}</p>
-            <p><strong>Phân bố:</strong> {selectedHerb["Phân bố"] || "Chưa có."}</p>
-            <p><strong>Bộ phận dùng:</strong> {selectedHerb["Bộ phận dùng"] || "Chưa có."}</p>
-            <p><strong>Công dụng:</strong> {selectedHerb["Công dụng"] || "Chưa có."}</p>
-            <button onClick={() => setSelectedHerb(null)} style={{ marginTop: "10px" }}>Đóng</button>
+      {/* Product click now opens 3D viewer with description below */}
+
+      {show3d && (
+        <div className="modal" onClick={() => { setShow3d(false); setSelectedHerb(null); }}>
+          <div className="modal-content modal-3d" onClick={(e) => e.stopPropagation()}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+              <h2 style={{ margin: 0 }}>{selectedHerb ? selectedHerb["Tên dược liệu"] : "Mô hình 3D"}</h2>
+              <button onClick={() => { setShow3d(false); setSelectedHerb(null); }}>Đóng</button>
+            </div>
+
+            <div style={{ width: "100%", height: "60vh" }}>
+              <CharacterViewer
+                modelFile={
+                  selectedHerb
+                    ? (selectedHerb["Model"] || selectedHerb["Model file"] || selectedHerb["ModelFile"] || selectedHerb["3D Model"] || selectedHerb["model"] || "scene.gltf")
+                    : "scene.gltf"
+                }
+                height="60vh"
+              />
+            </div>
+
+            <div style={{ marginTop: 12 }}>
+              {selectedHerb && (
+                <div className="popup-overlay" onClick={() => setSelectedHerb(null)}>
+                  <div className="popup" onClick={(e) => e.stopPropagation()}>
+                    {(
+                      <>
+                        <p><strong>Mô tả:</strong> {selectedHerb["Mô tả cây"] || "Chưa có."}</p>
+                        <p><strong>Giá niêm yết:</strong> {selectedHerb["Sinh thái"] || "Chưa có."}</p>
+                        {/* <p><strong>Phân bố:</strong> {selectedHerb["Phân bố"] || "Chưa có."}</p>
+                  <p><strong>Bộ phận dùng:</strong> {selectedHerb["Bộ phận dùng"] || "Chưa có."}</p>
+                  <p><strong>Công dụng:</strong> {selectedHerb["Công dụng"] || "Chưa có."}</p> */}
+                      </>
+                    )}
+                    <button onClick={() => setShowQR(true)}>Mã QR</button>
+                    {/* <button onClick={() => setSelectedHerb(null)}>Đóng</button> */}
+                  </div>
+                </div>
+              )}
+
+              {/* 👉 Thêm đoạn này ngay dưới popup ở trên */}
+              {showQR && (
+                <div className="qr-overlay" onClick={() => setShowQR(false)}>
+                  <div className="qr-modal" onClick={(e) => e.stopPropagation()}>
+                    <img src={qrImage} alt="Mã QR" className="qr-image" />
+                    <button onClick={() => setShowQR(false)}>Đóng</button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
@@ -194,3 +242,4 @@ const Store = () => {
 };
 
 export default Store;
+

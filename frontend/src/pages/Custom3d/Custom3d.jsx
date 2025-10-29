@@ -4,35 +4,35 @@ import ClothingPanel from "../../components/Custom3dGroup/ClothingPanel";
 import "./Custom3d.css";
 
 const Custom3d = () => {
-  const [selectedOptionId, setSelectedOptionId] = useState("shirt-basic");
-  const [primaryColor, setPrimaryColor] = useState("#3b82f6");
+  // const [selectedOptionId, setSelectedOptionId] = useState("shirt-basic");
+  // const [primaryColor, setPrimaryColor] = useState("#3b82f6");
   const [exporting, setExporting] = useState(false);
 
-  const clothingOptions = useMemo(
-    () => [
-      {
-        id: "shirt-basic",
-        label: "Basic Shirt",
-        thumbnailSrc: "/thumbnails/shirt_basic.png",
-      },
-      {
-        id: "shirt-oversize",
-        label: "Oversize",
-        thumbnailSrc: "/thumbnails/shirt_oversize.png",
-      },
-      {
-        id: "hoodie",
-        label: "Hoodie",
-        thumbnailSrc: "/thumbnails/hoodie.png",
-      },
-      {
-        id: "jacket",
-        label: "Jacket",
-        thumbnailSrc: "/thumbnails/jacket.png",
-      },
-    ],
-    []
-  );
+  // const clothingOptions = useMemo(
+  //   () => [
+  //     {
+  //       id: "shirt-basic",
+  //       label: "Basic Shirt",
+  //       thumbnailSrc: "/thumbnails/shirt_basic.png",
+  //     },
+  //     {
+  //       id: "shirt-oversize",
+  //       label: "Oversize",
+  //       thumbnailSrc: "/thumbnails/shirt_oversize.png",
+  //     },
+  //     {
+  //       id: "hoodie",
+  //       label: "Hoodie",
+  //       thumbnailSrc: "/thumbnails/hoodie.png",
+  //     },
+  //     {
+  //       id: "jacket",
+  //       label: "Jacket",
+  //       thumbnailSrc: "/thumbnails/jacket.png",
+  //     },
+  //   ],
+  //   []
+  // );
 
   const handleExport = async () => {
     setExporting(true);
@@ -51,7 +51,7 @@ const Custom3d = () => {
         />
       </div>
       <aside className="custom3d-panel">
-        <ClothingPanel
+        {/* <ClothingPanel
           title="Tùy chỉnh trang phục"
           options={clothingOptions}
           selectedId={selectedOptionId}
@@ -60,7 +60,7 @@ const Custom3d = () => {
           onColorChange={setPrimaryColor}
           onExport={handleExport}
           exportLoading={exporting}
-        />
+        /> */}
       </aside>
     </div>
   );

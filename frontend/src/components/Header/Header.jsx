@@ -14,7 +14,7 @@ const Header = () => {
                     <span> Hút lộc</span> <br />
                     <span> Vạn sự bình an</span> */}
                 {/* </h2> */}
-                {/* <button onClick={() => navigate('/store')}>Tra cứu thành phần thuốc</button> */}
+                <button onClick={() => navigate('/store')}>Tra cứu model</button>
             </div>
         </div>
     )

@@ -89,27 +89,27 @@ const Navbar = ({ setShowLogin }) => {
         >
           Trang chủ
         </Link>
-        <Link
+        {/* <Link
           to="/custom3d"
           onClick={() => setMenu("custom3d")}
           className={`${menu === "custom3d" ? "active" : ""}`}
         >
           Tạo 3D
-        </Link>
-        {/* <Link
+        </Link> */}
+        { <Link
           to="/store"
           onClick={() => setMenu("store")}
           className={`${menu === "store" ? "active" : ""}`}
         >
-          Tra cứu thành phần thuốc
-        </Link> */}
-        {/* <Link
+          Tra cứu model
+        </Link> }
+        {/* { <Link
           to="/hoidap"
           onClick={() => setMenu("mob-app")}
           className={`${menu === "mob-app" ? "active" : ""}`}
         >
           Hỏi đáp
-        </Link> */}
+        </Link> } */}
         <a
           href="#footer"
           onClick={() => setMenu("contact")}
