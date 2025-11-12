@@ -212,13 +212,13 @@ const Store = () => {
                     {(
                       <>
                         <p><strong>Mô tả:</strong> {selectedHerb["Mô tả cây"] || "Chưa có."}</p>
-                        <p><strong>Giá niêm yết:</strong> {selectedHerb["Sinh thái"] || "Chưa có."}</p>
+                        {/* <p><strong>Giá niêm yết:</strong> {selectedHerb["Sinh thái"] || "Chưa có."}</p> */}
                         {/* <p><strong>Phân bố:</strong> {selectedHerb["Phân bố"] || "Chưa có."}</p>
                   <p><strong>Bộ phận dùng:</strong> {selectedHerb["Bộ phận dùng"] || "Chưa có."}</p>
                   <p><strong>Công dụng:</strong> {selectedHerb["Công dụng"] || "Chưa có."}</p> */}
                       </>
                     )}
-                    <button onClick={() => setShowQR(true)}>Mã QR</button>
+                    {/* <button onClick={() => setShowQR(true)}>Mã QR</button> */}
                     {/* <button onClick={() => setSelectedHerb(null)}>Đóng</button> */}
                   </div>
                 </div>
