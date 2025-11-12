@@ -14,6 +14,8 @@ import TuViPage from "./pages/TuViPage/TuViPage";
 import Store from "./pages/Store/Store";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 import Custom3d from "./pages/Custom3d/Custom3d";
+import Store3d from "./pages/Store3d/Store3d";
+import Bank from "./pages/PlaceOrder/Bank/Bank";
 
 const App = () => {
   const [showLogin, setShowLogin] = useState(false);
@@ -31,9 +33,11 @@ const App = () => {
           <Route path="/hoidap" element={<TuViPage />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/order" element={<PlaceOrder />} />
+          <Route path="/order/bank" element={<Bank />} />
           <Route path="/myorders" element={<MyOrders />} />
           <Route path="/verify" element={<Verify />} />
           <Route path="/store" element={<Store />} />
+          <Route path="/store3d" element={<Store3d />} />
         </Routes>
       </div>
       <Footer />

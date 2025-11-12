@@ -10,7 +10,7 @@ const Cart = () => {
   const [products, setProducts] = useState([])
   const navigate = useNavigate()
   const CURRENCY = ' VNĐ'
-  const DELIVERY_CHARGE = 10000
+  const DELIVERY_CHARGE = 0
   const { url, token, removeFromCart, addToCart, food_list, setCartItems: setContextCartItems } = useContext(StoreContext)
   
   // Hàm định dạng tiền tệ với dấu phân cách hàng nghìn
@@ -264,11 +264,11 @@ const Cart = () => {
               <p>Thành tiền</p>
               <p>{formatCurrency(getTotalCartAmount())}{CURRENCY}</p>
             </div>
-            <hr />
-            <div className="cart-total-details">
+            {/* <hr /> */}
+            {/* <div className="cart-total-details">
               <p>Phí vận chuyển</p>
               <p>{formatCurrency(getTotalCartAmount() === 0 ? 0 : DELIVERY_CHARGE)}{CURRENCY}</p>
-            </div>
+            </div> */}
             <hr />
             <div className="cart-total-details">
               <b>Tổng</b>

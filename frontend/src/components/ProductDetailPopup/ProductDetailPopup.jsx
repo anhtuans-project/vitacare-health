@@ -38,15 +38,18 @@ const ProductDetailPopup = ({ product, onClose, onAddToCart }) => {
             
             {/* Removed rating section as it's not in the database model */}
             
-            <div className="product-description">
+            {/* <div className="product-description">
               <p>{product.description}</p>
-            </div>
+            </div> */}
             
             <div className="product-specifications">
               <h3>Thông tin sản phẩm</h3>
-              <ul>
+              {/* <ul>
                 <li><strong>Danh mục:</strong> {product.category}</li>
-              </ul>
+              </ul> */}
+              <div className="product-description">
+              <p>{product.description}</p>
+            </div>
             </div>
             
             <div className="product-actions">

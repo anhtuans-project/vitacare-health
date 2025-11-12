@@ -5,6 +5,7 @@ import { assets } from "../../components/assets/assets";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { rand } from "three/src/nodes/TSL.js";
 
 const PlaceOrder = () => {
   const [payment, setPayment] = useState("cod");
@@ -31,6 +32,7 @@ const PlaceOrder = () => {
     deliveryCharge,
   } = useContext(StoreContext);
   const navigate = useNavigate();
+  const orderId = Math.floor(100000 + Math.random() * 900000); // Tạo mã đơn hàng ngẫu nhiên
 
   // Hàm định dạng tiền tệ giống Cart.jsx
   const formatCurrency = (amount) => {
@@ -56,34 +58,35 @@ const PlaceOrder = () => {
     let orderData = {
       address: data,
       items: orderItems,
-      amount: getTotalCartAmount() + deliveryCharge,
+      amount: getTotalCartAmount(),
     };
-    if (payment === "stripe") {
-      let response = await axios.post(url + "/api/order/place", orderData, {
-        headers: { token },
-      });
-      if (response.data.success) {
-        const { session_url } = response.data;
-        window.location.replace(session_url);
-      } else {
-        toast.error("Something Went Wrong");
-      }
-    } else {
-      let response = await axios.post(url + "/api/order/placecod", orderData, {
-        headers: { token },
-      });
-      if (response.data.success) {
-        navigate("/myorders");
-        toast.success(response.data.message);
+    // if (payment === "stripe") {
+    //   let response = await axios.post(url + "/api/order/place", orderData, {
+    //     headers: { token },
+    //   });
+    //   if (response.data.success) {
+    //     const { session_url } = response.data;
+    //     window.location.replace(session_url);
+    //   } else {
+    //     toast.error("Something Went Wrong");
+    //   }
+    // } else {
+    //   let response = await axios.post(url + "/api/order/placecod", orderData, {
+    //     headers: { token },
+    //   });
+    //   if (response.data.success) {
+    try {
+        navigate("/order/bank", { state: { orderData, orderId: orderId } } );
+        toast.success("Đặt hàng thành công!");
         setCartItems({});
         // Xóa localStorage khi đặt hàng thành công
         localStorage.removeItem("cart");
         // Dispatch event để cập nhật navbar
         window.dispatchEvent(new Event("cartUpdated"));
-      } else {
+      } catch (error) {
         toast.error("Something Went Wrong");
       }
-    }
+    // }
   };
 
   useEffect(() => {
@@ -97,7 +100,7 @@ const PlaceOrder = () => {
 
   return (
     <form onSubmit={placeOrder} className="place-order">
-      <div className="place-order-left">
+      {/* <div className="place-order-left">
         <p className="title">Thông tin giao hàng</p>
         <div className="multi-field">
           <input
@@ -177,7 +180,7 @@ const PlaceOrder = () => {
           placeholder="Số điện thoại"
           required
         />
-      </div>
+      </div> */}
       <div className="place-order-right">
         <div className="cart-total">
           <h2>Quản lý đơn hàng</h2>
@@ -189,7 +192,7 @@ const PlaceOrder = () => {
                 {currency}
               </p>
             </div>
-            <hr />
+            {/* <hr />
             <div className="cart-total-details">
               <p>Phí giao hàng</p>
               <p>
@@ -198,15 +201,13 @@ const PlaceOrder = () => {
                 )}
                 {currency}
               </p>
-            </div>
+            </div> */}
             <hr />
             <div className="cart-total-details">
               <b>Tổng</b>
               <b>
                 {formatCurrency(
-                  getTotalCartAmount() === 0
-                    ? 0
-                    : getTotalCartAmount() + deliveryCharge
+                  getTotalCartAmount()
                 )}
                 {currency}
               </b>
@@ -220,7 +221,7 @@ const PlaceOrder = () => {
               src={payment === "cod" ? assets.checked : assets.un_checked}
               alt=""
             />
-            <p>COD ( Thanh toán khi nhận hàng )</p>
+            <p>QR Code</p>
           </div>
           {/* <div onClick={() => setPayment("stripe")} className="payment-option">
                         <img src={payment === "stripe" ? assets.checked : assets.un_checked} alt="" />
@@ -228,7 +229,7 @@ const PlaceOrder = () => {
                     </div> */}
         </div>
         <button className="place-order-submit" type="submit">
-          {payment === "cod" ? "Đặt hàng" : "Thanh toán"}
+          {payment === "cod" ? "Thanh toán" : "Thanh toán"}
         </button>
       </div>
     </form>

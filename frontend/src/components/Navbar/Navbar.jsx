@@ -19,6 +19,8 @@ const Navbar = ({ setShowLogin }) => {
       setMenu("home");
     } else if (path === "/store") {
       setMenu("store");
+    } else if (path === "/store3d") {
+      setMenu("store3d");
     } else if (path === "/hoidap") {
       setMenu("mob-app");
     } else if (path === "/custom3d") {
@@ -96,13 +98,20 @@ const Navbar = ({ setShowLogin }) => {
         >
           Tạo 3D
         </Link> */}
-        { <Link
+        {<Link
           to="/store"
           onClick={() => setMenu("store")}
           className={`${menu === "store" ? "active" : ""}`}
         >
           Tra cứu model
-        </Link> }
+        </Link>}
+        {<Link
+          to="/store3d"
+          onClick={() => setMenu("store3d")}
+          className={`${menu === "store3d" ? "active" : ""}`}
+        >
+          Cửa hàng
+        </Link>}
         {/* { <Link
           to="/hoidap"
           onClick={() => setMenu("mob-app")}
@@ -126,7 +135,7 @@ const Navbar = ({ setShowLogin }) => {
           <div className="navbar-profile">
             <img src={assets.profile_icon} alt="" />
             <ul className="navbar-profile-dropdown">
-              <li onClick={() => navigate("/myorders")}>
+              <li onClick={() => navigate("/cart")}>
                 {" "}
                 <img src={assets.bag_icon} alt="" /> <p>Đơn hàng</p>
               </li>
